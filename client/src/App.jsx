@@ -19,7 +19,7 @@ const Container = styled.div`
 `;
 
 function App() {
-  const [step, setStep] = useState(mode);
+  const [step, setStep] = useState(mode || 'welcome');
   const [isAuthenticated, setIsAuthenticated] = useState(DEV);
 
   useEffect(() => {
