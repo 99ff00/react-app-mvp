@@ -1,41 +1,41 @@
 import Player from './Player';
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import styled from 'styled-components';
 
 export default function Carousel() {
   const [position, setCurrentPosition] = useState(0);
   const [state, setState] = useState('welcome');
   const [assets, setAssets] = useState([]);
-  const pollingTimeout = useRef(null);
 
   const handleNext = useCallback(() => {
-    setAssets(assets => [...assets, { id: assets.length + 1 }]);
-    setCurrentPosition(position => position + 1);
-  }, []);
-
-  const start = useCallback(async () => {
-    const response = await fetch('/api/mux/assets_count');
-    const { count } = await response.json();
-    if (!count) {
-      pollingTimeout.current = setTimeout(() => {
-        start();
-      }, 5000);
-      return;
-    }
-    for (let i = 0; i < 5; i++) {
-      setAssets(assets => [...assets, { id: assets.length + 1 }]);
-    }
+    setAssets(prevAssets => [...prevAssets, { id: prevAssets.length + 1 }]);
+    setCurrentPosition(prevPosition => prevPosition + 1);
   }, []);
 
   useEffect(() => {
+    let pollingTimeout;
+    const start = async () => {
+      const response = await fetch('/api/mux/assets_count');
+      const { count } = await response.json();
+      if (!count) {
+        pollingTimeout = setTimeout(() => {
+          start();
+        }, 1000);
+        return;
+      }
+      for (let i = 0; i < 5; i++) {
+        setAssets(assets => [...assets, { id: assets.length + 1 }]);
+      }
+    };
+
     start();
-    return () => clearTimeout(pollingTimeout.current);
-  }, [start]);
+    return () => clearTimeout(pollingTimeout);
+  }, []);
 
   return (
     <Container>
       <Wrapper>
-        <Slider style={{ transform: `translateX(-${position * 100}dvw` }}>
+        <Slider style={{ transform: `translateX(-${position * 100}dvw)` }}>
           {assets.map((asset, index) => (
             <Player
               key={asset.id}

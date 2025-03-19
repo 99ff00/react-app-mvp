@@ -81,6 +81,7 @@ export default function Recorder({ onUploaded }) {
   const startQuestionsSequence = useCallback(() => {
     let questionIndex = currentQuestionIndex;
     questionTimerRef.current = setInterval(() => {
+      // Some direct DOM manipulations to prevent video flickering
       const secondsLeft = questionTimerSecRef.current;
       secondsLeft > 1
         ? recIndicatorRef.current.classList.add('active')

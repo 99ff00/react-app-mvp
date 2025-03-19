@@ -10,7 +10,7 @@ const PlayerContainer = styled.div`
 export default function Player({ active, unmount }) {
   const [asset, setAsset] = useState(null);
   const playerRef = useRef(null);
-  const [isUnmounted, setisUnmounted] = useState(unmount);
+  const [isUnmounted, setIsUnmounted] = useState(unmount);
 
   const loadAsset = useCallback(async () => {
     const response = await fetch(`/api/mux/random_asset`);
@@ -30,7 +30,7 @@ export default function Player({ active, unmount }) {
       return;
     }
     const timer = setTimeout(() => {
-      setisUnmounted(true);
+      setIsUnmounted(true);
     }, 500);
     return () => clearTimeout(timer);
   }, [unmount]);
