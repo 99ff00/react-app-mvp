@@ -1,24 +1,8 @@
 import './App.css';
-import React, { useCallback } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 
 export default function Welcome({ onStart }) {
-  const handleStart = useCallback(() => {
-    navigator.mediaDevices
-      .getUserMedia({
-        audio: true,
-        video: true,
-      })
-      .then(onStart)
-      .catch(function (error) {
-        if (error.name === 'NotAllowedError') {
-          alert(
-            'To use this app, please enable camera and microphone access in your browser settings.',
-          );
-        }
-      });
-  }, [onStart]);
-
   return (
     <Container>
       <Title>Video Speed Dating</Title>
@@ -29,7 +13,7 @@ export default function Welcome({ onStart }) {
         answer, and don't worry – you can re-record if needed!
       </p>
       <p>Ready to dive in and spark some real connections? Let's go! 🎥✨</p>
-      <StartButton onClick={handleStart}>Start</StartButton>
+      <StartButton onClick={onStart}>Start</StartButton>
     </Container>
   );
 }
